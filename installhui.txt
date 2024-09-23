@@ -21,3 +21,5 @@ screen -S network3 -dm bash -c 'sudo bash manager.sh up'
 
 # Сообщение об успешном запуске
 echo "Нода запущена в screen сессии 'network3'. Чтобы подключиться, выполните: screen -r network3"
+
+sudo bash manager.sh key
