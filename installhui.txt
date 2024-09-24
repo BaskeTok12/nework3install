@@ -4,22 +4,36 @@
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y screen net-tools
 
-# Скачиваем архив с нодой
-wget https://network3.io/ubuntu-node-v2.1.0.tar
+# Скачиваем архив с нодой, проверяем успешность скачивания
+if wget https://network3.io/ubuntu-node-v2.1.0.tar; then
+    echo "Архив с нодой успешно скачан."
+else
+    echo "Ошибка при скачивании архива." >&2
+    exit 1
+fi
 
-# Разархивируем 
-tar -xvf ubuntu-node-v2.1.0.tar
+# Разархивируем, проверяем успешность
+if tar -xvf ubuntu-node-v2.1.0.tar; then
+    echo "Архив успешно разархивирован."
+else
+    echo "Ошибка при разархивировании." >&2
+    exit 1
+fi
 
 # Удаляем архив
 rm -rf ubuntu-node-v2.1.0.tar
 
 # Переходим в папку с нодой
-cd ubuntu-node
+cd ubuntu-node || { echo "Ошибка при переходе в папку ubuntu-node"; exit 1; }
 
-# Создаем и заходим в screen сессию
+# Создаем и заходим в screen сессию для запуска ноды
 screen -S network3 -dm bash -c 'sudo bash manager.sh up'
 
 # Сообщение об успешном запуске
 echo "Нода запущена в screen сессии 'network3'. Чтобы подключиться, выполните: screen -r network3"
 
+# Ожидаем, пока screen сессия начнется, перед выполнением следующей команды
+sleep 2
+
+# Выполняем команду для ключа
 sudo bash manager.sh key
